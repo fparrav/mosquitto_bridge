@@ -1,0 +1,33 @@
+version: "3"
+services:
+  mosquitto1:
+    image: eclipse-mosquitto
+    container_name: mosquitto1
+    command: mosquitto -c /mosquitto/config/mosquitto1.conf
+    ports:
+      - "1883:1883" 
+    volumes:
+      - ./mosquitto1.conf:/mosquitto/config/mosquitto1.conf
+    restart: always
+
+  mosquitto-bridge:
+    image: eclipse-mosquitto
+    container_name: mosquitto-bridge
+    restart: always
+    command: mosquitto -c /mosquitto/config/mosquitto2.conf
+    ports:
+      - "1884:1884" 
+    depends_on:
+      - mosquitto1
+    volumes:
+      - ./mosquitto2.conf:/mosquitto/config/mosquitto2.conf
+
+  # mosquitto3:
+  #   image: eclipse-mosquitto
+  #   container_name: mosquitto3
+  #   restart: always
+  #   command: mosquitto -c /mosquitto/config/mosquitto3.conf
+  #   ports:
+  #     - "1885:1885" 
+  #   volumes:
+  #     - ./mosquitto3.conf:/mosquitto/config/mosquitto3.conf
